@@ -39,7 +39,23 @@ _proc(){
 	echo -e "\033[32m[$currentstep/$totalsteps] Compressing $1...\033[0m"
 	echo ""
 	
-	foreachd "$base/$2" "$output/$2" "$3" 0 "$4" 0
+	foreachd "$base/$2" "$output/$2" "$3" 0 "$4" 0 0
+	ret=$?
+	if [ $ret != 0 ]; then
+		onerror
+		# should not return..
+		return 1
+	fi
+	return 0
+}
+_copyone(){
+	currentstep=`expr $currentstep + 1`
+	# $1: hint, $2: filename, $3: dir
+	echo -e "\033[32m[$currentstep/$totalsteps] Copying $1...\033[0m"
+	echo ""
+	
+	cp "$2" "$output"
+	
 	ret=$?
 	if [ $ret != 0 ]; then
 		onerror
@@ -54,7 +70,7 @@ _copy(){
 	echo -e "\033[32m[$currentstep/$totalsteps] Copying $1...\033[0m"
 	echo ""
 	
-	foreachd "$base/$2" "$output/$2" "direct" 0 "$3" 1
+	foreachd "$base/$2" "$output/$2" "direct" 0 "$3" 1 1
 	ret=$?
 	if [ $ret != 0 ]; then
 		onerror
@@ -66,7 +82,7 @@ _copy(){
 
 foreachd(){
 	# $1: basepath, $2: output dir (w/ type suffix), 
-	# $3: processor type, $4: recursive, 0: yes, $5: restricted file extname, $6: copy files with improper extname
+	# $3: processor type, $4: recursive, 0: yes, $5: restricted file extname, $6: copy files with improper extname, $7: add min attr
 	# NOTE: all paths SHOULD NOT end with /.
 	for filepath in ${1}/*; do
 		if [ ! -d "$filepath" ] && [[ "$filepath" != *"*"* ]] ; then
@@ -75,13 +91,14 @@ foreachd(){
 			# $3: filename
 
 			filename=`basename "$filepath"`
-			relpath=`getrelpath ${base} ${filepath}`
+			relpath=`getrelpath "${base}" "${filepath}"`
 			outfile="$2/$filename"
-			outfile=`addattr "$outfile" "min"`
+			if [ "$7" == 0 ]; then
+				outfile=`addattr "$outfile" "min"`
+			fi
 
 			#first check if dirs exist.
 			if [ ! -d `dirname "$outfile"` ]; then
-				echo `dirname "$outfile"`
 				mkdir -p `dirname "$outfile"`
 			fi
 
@@ -96,7 +113,6 @@ foreachd(){
 
 			if contains "$filename" ".min." ; then
 				# minified file, do not process them.
-				echo "$filepath" "$2/`basename "$filepath"`"
 				if ! cp "$filepath" "$2/`basename "$filepath"`" ; then
 					echo -e "\033[31mError occurred while copying file: \033[0m$filepath"
 					return 1
@@ -111,7 +127,7 @@ foreachd(){
 			fi
 		else
 			if [ "$4" ] && [[ "$filepath" != *"*"* ]]; then
-				foreachd "$filepath" "$2/`getrelpath "$1" "$filepath"`" "$3" "$4" "$5" "$6"
+				foreachd "$filepath" "$2/`getrelpath "$1" "$filepath"`" "$3" "$4" "$5" "$6" "$7"
 				return $? # Bubbling!
 			fi
 		fi
@@ -122,7 +138,7 @@ foreachd(){
 # MAIN ENTRY IS HERE
 base=`dirname $0`
 output="$base/build"
-totalsteps=6
+totalsteps=8
 ver=290125
 
 echo -e "\033[35m\x20\x5f\x5f\x5f\x5f\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x5f\x5f\x20\x20\x5f\x5f\x20\x20\x20\x20\x5f\x20\x20\x20\x20\x5f\x5f\x5f\x5f\x5f\x0a\x2f\x20\x5f\x5f\x5f\x7c\x7c\x20\x7c\x5f\x20\x5f\x20\x5f\x5f\x28\x5f\x29\x20\x5f\x5f\x5f\x7c\x20\x7c\x5f\x20\x2f\x20\x5f\x7c\x5f\x20\x5f\x5f\x20\x20\x20\x20\x20\x20\x20\x7c\x20\x20\x5c\x2f\x20\x20\x7c\x20\x20\x2f\x20\x5c\x20\x20\x7c\x20\x5f\x5f\x5f\x5f\x7c\x0a\x5c\x5f\x5f\x5f\x20\x5c\x7c\x20\x5f\x5f\x7c\x20\x27\x5f\x5f\x7c\x20\x7c\x2f\x20\x5f\x5f\x7c\x20\x5f\x5f\x7c\x20\x7c\x5f\x7c\x20\x27\x5f\x20\x5c\x20\x5f\x5f\x5f\x5f\x5f\x7c\x20\x7c\x5c\x2f\x7c\x20\x7c\x20\x2f\x20\x5f\x20\x5c\x20\x7c\x20\x20\x5f\x7c\x0a\x20\x5f\x5f\x5f\x29\x20\x7c\x20\x7c\x5f\x7c\x20\x7c\x20\x20\x7c\x20\x7c\x20\x28\x5f\x5f\x7c\x20\x7c\x5f\x7c\x20\x20\x5f\x7c\x20\x7c\x5f\x29\x20\x7c\x5f\x5f\x5f\x5f\x5f\x7c\x20\x7c\x20\x20\x7c\x20\x7c\x2f\x20\x5f\x5f\x5f\x20\x5c\x7c\x20\x7c\x5f\x5f\x5f\x0a\x7c\x5f\x5f\x5f\x5f\x2f\x20\x5c\x5f\x5f\x7c\x5f\x7c\x20\x20\x7c\x5f\x7c\x5c\x5f\x5f\x5f\x7c\x5c\x5f\x5f\x7c\x5f\x7c\x20\x7c\x20\x2e\x5f\x5f\x2f\x20\x20\x20\x20\x20\x20\x7c\x5f\x7c\x20\x20\x7c\x5f\x2f\x5f\x2f\x20\x20\x20\x5c\x5f\x5c\x5f\x5f\x5f\x5f\x5f\x7c\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x7c\x5f\x7c\x0a\033[37m\n\n\t\tStrictfp-MAE Prebuilder\033[0m\n"
@@ -135,9 +151,20 @@ _proc "CSS files" "assets/$ver/css" "css" "css"
 _proc "JavaScript files" "assets/$ver/js" "js" "js"
 
 # $1: file hint, $2: dir, $3, $4, $5: restricted file extname
-_copy "HTMLs" "." "html"
+_copyone "index.html" "index.html" "html"
 _copy "templates" "assets/$ver/templates"
 _copy "static files" "assets/$ver/static"
+
+currentstep=`expr $currentstep + 1`
+echo -e "\033[32m[$currentstep/$totalsteps] Processing 'index.html'...\033[0m"
+cd build
+sed 's/spa.css/spa.min.css/' index.html -i
+sed 's/mae-preload.js/mae-preload.min.js/' index.html -i
+cd ..
+
+currentstep=`expr $currentstep + 1`
+echo -e "\033[32m[$currentstep/$totalsteps] Generating i18n data...\033[0m"
+node ./bin/i18ncompile.js ./bin/strictly-mae>"./build/assets/$ver/static/i18ndata.json"
 
 
 echo -e "\n\033[32mDone, have fun!\033[0m"
