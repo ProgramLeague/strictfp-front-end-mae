@@ -2,6 +2,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="#ddd">
@@ -10,15 +12,46 @@
 	<script>
 	var cApiRoot = "api/v0", cAssetRoot = "assets/290125";
 	</script>
-	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
-	<script src="assets/290125/js/jquery.min.js" type="text/javascript"></script>
-	<script src="assets/290125/js/resLoader.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="assets/290125/css/index.css" type="text/css" />
+	<link rel="stylesheet" href="assets/290125/css/spa.css" type="text/css" />
 </head>
 <body>
+	<noscript>
+		<!-- SEO -->
+		<h1><!-- TITLE --></h1>
+		<div class="content"><!-- CONTENT --></div>
+	</noscript>
 	<div id="load_progress"><div class="inner"></div></div>
-	<div style="display:block; position: fixed;" class="loader__base loader__center--large" id="loading-all">
+	<div class="loader__base loader__center--large" id="loading-all">
         <div class="loader__large">Loading...</div>
     </div>
+
+	<div id="darkfantasies"></div>
+	<!--<div class="alertbox">
+		<span class="title">alert</span>
+		<span class="text">Are you sure?</span>
+		<div class="btnwrap">
+			<div class="btn">我已了解此行为所带来的风险并继续</div>
+		</div>
+	</div>-->
+	<!--<a href="mae:article:moha">MoHA</a>-->
+	<header id="header">
+		<span class="logo">STRictfp</span>
+		<div class="navi-wrapper">
+			<span class="navi">Top page</span>
+			<span class="navi">Archives</span>
+			<span class="navi">Tags</span>
+			<span class="navi">About / Contact us</span>
+		</div>
+	</header>
+	<div id="header-space">
+		<div id="headerbar-portrait"></div>
+	</div>
+	<div id="mainer">
+		<div id="banner-wrapper">
+			<img src="assets/290125/images/banner.jpg"></img>
+		</div>
+	</div>
+	<!-- AFTER ALL -->
+	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
 </body>
 </html>
