@@ -51,8 +51,8 @@
 			<!--<div class="banner"></div>-->
 			<img src="assets/290125/images/banner.jpg">
 		</div>
-		<div id="main-content" class="clearfix">
-			<!--<div class="article-list">
+		<div id="main-content" class="clearfix mainers">
+			<div class="article-list">
 				<div class="item">
 					<h2>Scientists developed a new way to +1s</h2>
 					<div class="info">
@@ -64,11 +64,13 @@
 					<span class="brief">Brief.......</span>
 					<div class="img"></div>
 				</div>
-			</div>-->
+			</div>
 		</div>
-		<div id="side-content" class="clearfix">
-			side-content
+		<div id="side-content" class="clearfix mainers">
 		</div>
+	</div>
+	<div id="footer">
+		Copyright &copy; 2017- Program League. Contents are licensed under the CC-BY-NC-SA 3.0 License.
 	</div>
 	<!-- AFTER ALL -->
 	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
@@ -77,7 +79,7 @@
 	for( var i = 0; i < 100; i++ ) {
 		a += "<p>+1s</p>";
 	}
-	$("#side-content")[0].innerHTML = a;
+	document.querySelectorAll("#side-content")[0].innerHTML = a;
 	</script>
 </body>
 </html>
