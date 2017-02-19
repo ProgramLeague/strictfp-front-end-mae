@@ -46,12 +46,12 @@
 	<div id="headerbar-portrait">
 		<span class="sidemenu-open">M</span>
 	</div>
-	<div id="mainer">
+	<div id="mainer" class="clearfix">
 		<div id="banner-wrapper">
 			<!--<div class="banner"></div>-->
-			<img src="assets/290125/images/banner.jpg">
+			<img id="banner-img" src="assets/290125/images/banner.jpg">
 		</div>
-		<div id="main-content" class="clearfix mainers">
+		<div id="main-content" class="mainers">
 			<div class="article-list">
 				<div class="item">
 					<h2>Scientists developed a new way to +1s</h2>
@@ -66,17 +66,18 @@
 				</div>
 			</div>
 		</div>
-		<div id="side-content" class="clearfix mainers">
+		<div id="side-content" class="mainers">
 		</div>
 	</div>
 	<div id="footer">
-		Copyright &copy; 2017- Program League. Contents are licensed under the CC-BY-NC-SA 3.0 License.
+		<span class="copyright">Copyright &copy; 2017- Program League. Contents are licensed under the CC-BY-NC-SA 3.0 License.</span>
+		
 	</div>
 	<!-- AFTER ALL -->
 	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
 	<script>
 	var a="";
-	for( var i = 0; i < 100; i++ ) {
+	for( var i = 0; i < 20; i++ ) {
 		a += "<p>+1s</p>";
 	}
 	document.querySelectorAll("#side-content")[0].innerHTML = a;
