@@ -172,26 +172,6 @@ body {
 	}
 }
 
-/*@media screen and (min-width: 1080px) and (orientation: landscape) {
-	#mainer {
-		width: 980px;
-	}
-}
-@media screen and (min-width: 980px) and (max-width: 1079px) and (orientation: landscape) {
-	#mainer {
-		width: 780px;
-	}
-	#banner-wrapper img {
-		max-width: 100%;
-		height: auto;
-		object-fit: contain;
-	}
-}
-@media screen and (max-width: 979px) and (orientation: landscape) {
-	#mainer {
-		width: 600px;
-	}
-}*/
 @media screen and (orientation: portrait) {
 	#mainer {
 		width: 100%;
