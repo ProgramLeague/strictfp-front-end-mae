@@ -13,8 +13,10 @@
 	var cApiRoot = "api/v0", cAssetRoot = "assets/290125";
 	</script>
 	<link rel="stylesheet" href="assets/290125/css/spa.css" type="text/css" />
+	<link rel="stylesheet" href="assets/290125/css/font-awesome/css/font-awesome.min.css" type="text/css" />
 </head>
 <body>
+<div id="stage">
 	<noscript>
 		<!-- SEO -->
 		<h1><!-- TITLE --></h1>
@@ -66,7 +68,30 @@
 				</div>
 			</div>
 		</div>
-		<div id="side-content" class="mainers">
+		<div id="side-content">
+			<div id="side-related-articles" class="mainers">
+				<p class="headline">Related articles<p>
+				<p class="item">Some notices on the programmer's way to lolita</p>
+				<p class="item">Real deep dark fantasies</p>
+				<p class="item">Notes on class `Person`</p>
+			</div>
+			<div id="side-recent-articles" class="mainers">
+				<p class="headline">Recent articles<p>
+				<p class="hint">No recent articles.</p>
+			</div>
+			<div id="side-categories" class="mainers">
+				<p class="headline">Categories<p>
+				<p class="item">Lolita<span class="count">162</span></p>
+				<p class="item">Notes<span class="count">83</span></p>
+				<p class="item">Absurd world<span class="count">4</span></p>
+				<p class="viewmore">View more</p>
+			</div>
+			<div id="side-links" class="mainers">
+				<p class="headline">Links<p>
+				<p class="item"><a href="http://akiris.esy.es/">Jigoku Tsuushin</a></p>
+				<p class="item"><a href="javascript:location.reload();">The best site to understand recursion</a></p>
+				<p class="item"><a href="http://www.zhihu.com">Hahu, share your knowledge, experience and clums</a></p>
+			</div>
 		</div>
 	</div>
 	<div id="footer">
@@ -76,11 +101,12 @@
 	<!-- AFTER ALL -->
 	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
 	<script>
-	var a="";
+	/*var a="";
 	for( var i = 0; i < 20; i++ ) {
 		a += "<p>+1s</p>";
 	}
-	document.querySelectorAll("#side-content")[0].innerHTML = a;
+	document.querySelectorAll("#side-content")[0].innerHTML = a;*/
 	</script>
+</div><!-- stage -->
 </body>
 </html>
