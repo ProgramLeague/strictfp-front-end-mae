@@ -1,0 +1,45 @@
+.before-icon {
+	font-family: 'FontAwesome';
+	display: inline-block;
+	margin-right: 0.5em;
+	color: #666;
+}
+
+#article-list .item {
+	padding: 0.5em;
+	padding-bottom: 2em;
+	&:not(:last-child) {
+		border-bottom: #CCC 1px dotted;
+	}
+	h2 {
+		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		font-size: 1.5rem;
+		margin: .3em 0 .2em 0;
+	}
+	.info {
+		font-size: 0.8rem;
+		font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+		span {
+			display: inline-block;
+			margin-right: 1.2em;
+		}
+		.author:before:extend(.before-icon) {
+			content: '\f007';
+		}
+		.ctime:before:extend(.before-icon) {
+			content: '\f017';
+		}
+		.view:before:extend(.before-icon) {
+			content: '\f06e';
+		}
+		.comment:before:extend(.before-icon) {
+			content: '\f086';
+		}
+	}
+	.brief {
+		margin-top: .5em;
+		margin-left: .5rem;
+		display: block;
+		font-family: Arial;
+	}
+}
