@@ -1,0 +1,51 @@
+//zen-reader
+//Note: for notifications and popups, set z-index to 2000+.
+#zen-reader {
+    z-index: 1050;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #d8d8d8;
+    color: #111;
+    .left {
+       // pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30%;
+        height: 100%;
+        background: rgba( 255,0,0,0.3);
+        z-index: 2;
+    }
+    .right {
+        //pointer-events: visible;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: rgba( 0,255,0,0.3);
+        z-index: 3;
+    }
+    .status {
+        position: absolute;
+        right: 1em;
+        bottom: 1em;
+        line-height: 1em;
+        font-size: 0.85em;
+    }
+    &.night {
+        background: #202020;
+        color: #777;
+    }
+    .content {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 2em;
+        padding: 2em 4em 2em 4em;
+    }
+}
