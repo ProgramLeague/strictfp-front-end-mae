@@ -11,21 +11,9 @@
 	<title>strictly-mae alpha</title>
 	<script>
 	var cApiRoot = "api/v0", cAssetRoot = "assets/290125";
-	less = {
-		env: "development",
-		async: false,
-		fileAsync: false,
-		poll: 1000,
-		functions: {},
-		dumpLineNumbers: "all",
-		relativeUrls: false,
-	};
 	</script>
-	<link rel="stylesheet" href="assets/290125/css/spa.css" type="text/css" />
-	<link rel="stylesheet" href="assets/290125/css/font-awesome/css/font-awesome.min.css" type="text/css" />
-	<link rel="stylesheet/less" type="text/css" href="assets/290125/less/article.less">
-	<link rel="stylesheet/less" type="text/css" href="assets/290125/less/complex.less">
-	<script src="assets/290125/js/less.min.js" type="text/javascript"></script>
+	<!-- inject:css -->
+  	<!-- endinject -->
 </head>
 <body>
 <div id="stage">
@@ -63,7 +51,7 @@
 	<div id="mainer" class="clearfix">
 		<div id="banner-wrapper">
 			<!--<div class="banner"></div>-->
-			<img id="banner-img" src="assets/290125/images/banner.jpg">
+			<img id="banner-img" src="/images/banner.jpg">
 		</div>
 		<div id="main-content" class="mainers">
 			<div id="article-list"  style="display: none;">
@@ -155,8 +143,6 @@
 		<span class="copyright">Copyright &copy; 2017- Program League. Contents are licensed under the CC-BY-NC-SA 3.0 License.</span>
 		
 	</div>
-	<!-- AFTER ALL -->
-	<script src="assets/290125/js/mae-preload.js" type="text/javascript"></script>
 	<script>
 	/*var a="";
 	for( var i = 0; i < 20; i++ ) {
@@ -164,6 +150,8 @@
 	}
 	document.querySelectorAll("#side-content")[0].innerHTML = a;*/
 	</script>
-</div><!-- stage -->
+</div>
+<!-- inject:js -->
+<!-- endinject -->
 </body>
 </html>
