@@ -4,3 +4,4 @@ bin/node_modules/
 *.log
 node_modules
 dist
+src/less/cursor-style.less

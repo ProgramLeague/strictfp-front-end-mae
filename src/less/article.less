@@ -5,7 +5,7 @@
 	color: #666;
 }
 
-#article-list .item {
+#article-list .item, #article-main .item {
 	padding: 0.5em;
 	padding-bottom: 2em;
 	&:not(:last-child) {
@@ -41,5 +41,20 @@
 		margin-left: .5rem;
 		display: block;
 		font-family: Arial;
+	}
+}
+
+#article-main {
+	.content {
+		margin-left: 1em;
+	}
+	.item {
+		border-bottom: 0 !important;
+	}
+	p {
+		line-height: 1.25rem;
+		font-family: Arial;
+		font-size: 0.9rem;
+		text-shadow: 0 0.3px;
 	}
 }

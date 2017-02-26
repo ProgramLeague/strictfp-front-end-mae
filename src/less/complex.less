@@ -5,7 +5,11 @@
 	background-color: rgba( 244, 244, 244, 0.7 );
 }
 .button {
-	transition: background-color ease-in .4s;
+	transition: background-color ease-in .2s;
+}
+.clickable:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .mainers {
@@ -41,6 +45,9 @@
 			content: '\f0a9';
 			font-family: 'FontAwesome';
 			margin-right: 0.5em
+		}
+		&.viewmore {
+			margin-left: 1em;
 		}
 	}
 	.count {
