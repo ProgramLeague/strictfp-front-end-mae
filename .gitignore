@@ -1,7 +1,5 @@
-build/
-misc/
-bin/node_modules/
 *.log
 node_modules
 dist
+Trashes
 src/less/cursor-style.less
