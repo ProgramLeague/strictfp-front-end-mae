@@ -44,6 +44,9 @@ gulp.task('js', ['clean', 'i18n'], function () {
         .pipe(sourcemaps.init())
         // .pipe(concat('dist.js'))
         .pipe(uglify())
+        .pipe(concat('./misc/license-head.txt'))
+        .pipe(gulp.dest('./dist/js'))
+        .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist/js/'));
 });
@@ -70,4 +73,6 @@ gulp.task('inject', ['style', 'js'], function () {
         .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('default', ['clean', 'asserts', 'inject']);
+gulp.task('default', ['clean'], function () {
+    gulp.start('asserts', 'inject']);
+});
