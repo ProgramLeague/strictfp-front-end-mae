@@ -5,7 +5,9 @@ let gulp = require('gulp'),
     gulpClean = require('gulp-clean'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    inject = require('gulp-inject');
+    inject = require('gulp-inject'),
+    license = require('gulp-header-license'),
+    fs = require('fs');
 let { i18n, style } = require('./tasks');
 
 gulp.task('style', ['clean'], function () {
@@ -44,7 +46,7 @@ gulp.task('js', ['clean', 'i18n'], function () {
         .pipe(sourcemaps.init())
         // .pipe(concat('dist.js'))
         .pipe(uglify())
-        .pipe(concat('./misc/license-head.txt'))
+        .pipe(license(fs.readFileSync('misc/license-head.txt','utf-8')))
         .pipe(gulp.dest('./dist/js'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('.'))
@@ -74,5 +76,5 @@ gulp.task('inject', ['style', 'js'], function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('asserts', 'inject']);
+    gulp.start(['asserts', 'inject']);
 });
