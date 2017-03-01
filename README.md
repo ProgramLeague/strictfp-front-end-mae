@@ -2,5 +2,5 @@
 
 ## TODO
 
-* Zen模式翻页算法(zen-reader.js)
-* 告诉我怎么构建
+* Zen模式翻页算法(zen-reader.js) (不干了)
+* 
