@@ -7,6 +7,9 @@ let gulp = require('gulp'),
     concat = require('gulp-concat'),
     inject = require('gulp-inject'),
     license = require('gulp-header-license'),
+    browserSync = require('browser-sync').create(),
+    rename = require('gulp-rename'),
+    reload = browserSync.reload,
     fs = require('fs');
 let { i18n, style } = require('./tasks');
 
@@ -20,20 +23,38 @@ gulp.task('style', ['clean'], function () {
         .pipe(style())
         .pipe(cleanCss())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./dist/css/'));
+        .pipe(gulp.dest('./dist/css/'))
+        .pipe(reload({
+            stream: true
+        }));
 });
 
-gulp.task('asserts', ['clean'], function () {
+gulp.task('assets', ['clean'], function () {
     gulp.src('./src/images/**/*')
         .pipe(gulp.dest('./dist/images/'));
     gulp.src('./node_modules/font-awesome/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'));
 });
 
+
+gulp.task('serve', ['inject', 'assets'], function () {
+    browserSync.init({
+        server: './dist'
+    });
+
+    gulp.watch('./dist/js/**/*.js', ['js']);
+    gulp.watch('./dist/(images|fonts)/**/*', ['assets']);
+    gulp.watch('./dist/(less|css)/**/*', ['style'])
+    gulp.watch('./dist/*.html', ['inject']).on('change', reload);
+});
+
 gulp.task('i18n', ['clean'], function () {
     return gulp.src('./src/i18n/*.txt')
         .pipe(i18n())
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest('./dist/js/'))
+        .pipe(reload({
+            stream: true
+        }));
 });
 
 gulp.task('js', ['clean', 'i18n'], function () {
@@ -50,7 +71,10 @@ gulp.task('js', ['clean', 'i18n'], function () {
         .pipe(gulp.dest('./dist/js'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest('./dist/js/'))
+        .pipe(reload({
+            stream: true
+        }));
 });
 
 gulp.task('clean', function () {
@@ -72,9 +96,12 @@ gulp.task('inject', ['style', 'js'], function () {
             }
         )
         )
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./dist/'))
+        .pipe(reload({
+            stream: true
+        }));
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(['asserts', 'inject']);
+    gulp.start(['js', 'assets', 'inject']);
 });

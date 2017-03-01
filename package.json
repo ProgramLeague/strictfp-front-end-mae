@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ProgramLeague/strictfp-front-end-mae#readme",
   "devDependencies": {
+    "browser-sync": "^2.18.8",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-clean-css": "^3.0.3",
@@ -24,6 +25,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-header-license": "^1.0.9",
     "gulp-inject": "^4.2.0",
+    "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.4.1",
     "gulp-uglify": "^2.0.1",
     "less": "^2.7.2",
