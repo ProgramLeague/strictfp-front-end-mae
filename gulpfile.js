@@ -42,10 +42,10 @@ gulp.task('serve', ['inject', 'assets'], function () {
         server: './dist'
     });
 
-    gulp.watch('./dist/js/**/*.js', ['js']);
-    gulp.watch('./dist/(images|fonts)/**/*', ['assets']);
-    gulp.watch('./dist/(less|css)/**/*', ['style'])
-    gulp.watch('./dist/*.html', ['inject']).on('change', reload);
+    gulp.watch('./src/js/**/*.js', ['js']);
+    gulp.watch('./src/(images|fonts)/**/*', ['assets']);
+    gulp.watch('./src/(less|css)/**/*', ['style'])
+    gulp.watch('./src/*.html', ['inject']).on('change', reload);
 });
 
 gulp.task('i18n', ['clean'], function () {
