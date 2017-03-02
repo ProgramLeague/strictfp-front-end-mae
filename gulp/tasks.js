@@ -1,8 +1,10 @@
-let path = require('path');
+let path = require('path'),
+    fs = require("fs");
 
 let through2 = require('through2'),
     less = require('gulp-less'),
-    Autoprefix = require('less-plugin-autoprefix');
+    Autoprefix = require('less-plugin-autoprefix'),
+    gulp = require('gulp');
 
 
 function tpl(props) {
@@ -70,4 +72,23 @@ exports.style = function () {
         cb();
     });
     return proxy;
+}
+
+/**
+ * Returns glob(s) of 3rd party plugins.
+ * They're defined in config.json.
+ * @param {String} type 3rd party plugin type.
+ * @return {glob} glob of them.
+ */
+exports.getThirdparty = function (type) {
+    let config = JSON.parse(fs.readFileSync("./config.json","utf-8")); //use fs.read to avoid caching problem
+
+    let glob = [];
+    let base = config['3rdparty'].base;
+
+    if(!config['3rdparty'][type]) return glob;
+    for(let file of config['3rdparty'][type]) {
+        glob.push(path.join(base, file));
+    }
+    return glob;
 }

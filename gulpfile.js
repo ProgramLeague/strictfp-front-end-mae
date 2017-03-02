@@ -11,13 +11,44 @@ let gulp = require('gulp'),
     rename = require('gulp-rename'),
     reload = browserSync.reload,
     fs = require('fs');
-let { i18n, style } = require('./tasks');
+let { i18n, style, getThirdparty } = require('./gulp/tasks');
 
-gulp.task('style', ['clean'], function () {
+/*
+clean
+default(clean)->(post-modification)
+i18n style3rd js3rd
+style(style3rd) js(i18n,js3rd) assets
+inject(style,js,assets)
+post-modification(inject)
+(serve(post-modification))
+*/
+
+gulp.task('default', ['clean'], function () {
+    gulp.start(['post-modification']);
+});
+
+gulp.task('clean', function () {
+    return gulp.src('./dist', {
+        read: false
+    })
+        .pipe(gulpClean({ force: true }));
+});
+
+gulp.task('style3rd', function () {
+    return gulp.src(getThirdparty('style' ))
+        .pipe(style())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./dist/css/'))
+        .pipe(reload({
+            stream: true
+        }));
+    //no sms needed for 3rdparty plugins.
+});
+
+gulp.task('style', ['style3rd'], function () {
     return gulp.src([
         './src/less/**/*.less',
         './src/css/**/*.css',
-        './node_modules/font-awesome/css/font-awesome.min.css'
     ])
         .pipe(sourcemaps.init())
         .pipe(style())
@@ -29,26 +60,14 @@ gulp.task('style', ['clean'], function () {
         }));
 });
 
-gulp.task('assets', ['clean'], function () {
+gulp.task('assets', function () {
     gulp.src('./src/images/**/*')
         .pipe(gulp.dest('./dist/images/'));
     gulp.src('./node_modules/font-awesome/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'));
 });
 
-
-gulp.task('serve', ['inject', 'assets'], function () {
-    browserSync.init({
-        server: './dist'
-    });
-
-    gulp.watch('./src/js/**/*.js', ['js']);
-    gulp.watch('./src/(images|fonts)/**/*', ['assets']);
-    gulp.watch('./src/(less|css)/**/*', ['style'])
-    gulp.watch('./src/*.html', ['inject']).on('change', reload);
-});
-
-gulp.task('i18n', ['clean'], function () {
+gulp.task('i18n', function () {
     return gulp.src('./src/i18n/*.txt')
         .pipe(i18n())
         .pipe(gulp.dest('./dist/js/'))
@@ -57,18 +76,20 @@ gulp.task('i18n', ['clean'], function () {
         }));
 });
 
-gulp.task('js', ['clean', 'i18n'], function () {
-    return gulp.src([
-        './node_modules/jquery/dist/jquery.min.js',
-        './node_modules/device.js/device.js',
-        './src/js/**/*.js',
-        './dist/js/**/*.js'
-    ])
+gulp.task('js3rd', function () {
+    return gulp.src(getThirdparty('js'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./dist/js/'))
+        .pipe(reload({
+            stream: true
+        }));
+});
+
+gulp.task('js', ['i18n', 'js3rd'], function () {
+    return gulp.src('./src/js/**/*.js')
         .pipe(sourcemaps.init())
-        // .pipe(concat('dist.js'))
         .pipe(uglify())
         .pipe(license(fs.readFileSync('misc/license-head.txt','utf-8')))
-        .pipe(gulp.dest('./dist/js'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist/js/'))
@@ -77,14 +98,7 @@ gulp.task('js', ['clean', 'i18n'], function () {
         }));
 });
 
-gulp.task('clean', function () {
-    return gulp.src('./dist', {
-        read: false
-    })
-        .pipe(gulpClean({ force: true }));
-});
-
-gulp.task('inject', ['style', 'js'], function () {
+gulp.task('inject', ['style', 'js', 'assets'], function () {
     return gulp.src('./src/index.html')
         .pipe(
         inject(
@@ -102,6 +116,13 @@ gulp.task('inject', ['style', 'js'], function () {
         }));
 });
 
-gulp.task('default', ['clean'], function () {
-    gulp.start(['js', 'assets', 'inject']);
+gulp.task('serve', ['post-modification'], function () {
+    browserSync.init({
+        server: './dist'
+    });
+
+    gulp.watch('./src/js/**/*.js', ['js']);
+    gulp.watch('./src/(images|fonts)/**/*', ['assets']);
+    gulp.watch('./src/(less|css)/**/*', ['style']);
+    gulp.watch('./src/*.html', ['inject']);
 });
