@@ -8,6 +8,7 @@ let gulp = require('gulp'),
     inject = require('gulp-inject'),
     license = require('gulp-header-license'),
     browserSync = require('browser-sync').create(),
+    injectString = require('gulp-inject-string'),
     rename = require('gulp-rename'),
     reload = browserSync.reload,
     fs = require('fs');
@@ -15,16 +16,14 @@ let { i18n, style, getThirdparty } = require('./gulp/tasks');
 
 /*
 clean
-default(clean)->(post-modification)
+default(clean)->(inject)
 i18n style3rd js3rd
 style(style3rd) js(i18n,js3rd) assets
 inject(style,js,assets)
-post-modification(inject)
-(serve(post-modification))
 */
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(['post-modification']);
+    gulp.start(['inject']);
 });
 
 gulp.task('clean', function () {
@@ -35,7 +34,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('style3rd', function () {
-    return gulp.src(getThirdparty('style' ))
+    return gulp.src(getThirdparty('style'))
         .pipe(style())
         .pipe(cleanCss())
         .pipe(gulp.dest('./dist/css/'))
@@ -99,16 +98,28 @@ gulp.task('js', ['i18n', 'js3rd'], function () {
 });
 
 gulp.task('inject', ['style', 'js', 'assets'], function () {
+    let presetOpts = {
+        isRelease: !!gulp.env.release,
+        cdn: gulp.env.cdn || ".",
+        apiRoot: gulp.env['api-root'] || '/api/v0',
+        misc: JSON.parse(gulp.env['preset-misc'] || '{}')
+    };
     return gulp.src('./src/index.html')
         .pipe(
-        inject(
-            gulp.src(['./dist/js/**/*.js',
-                './dist/css/**/*.css'], { read: false }),
-            {
-                ignorePath: '/dist',
-                removeTags: true
-            }
+            inject(
+                gulp.src(['./dist/js/**/*.js',
+                    './dist/css/**/*.css'], { read: false }),
+                {
+                    ignorePath: '/dist',
+                    removeTags: true
+                }
+            )
         )
+        .pipe(
+            injectString.replace(
+                '<!-- intron:1 -->', 
+                `<script>window.maePresetOpts = ${JSON.stringify(presetOpts)};</script>`
+            )
         )
         .pipe(gulp.dest('./dist/'))
         .pipe(reload({
@@ -116,7 +127,7 @@ gulp.task('inject', ['style', 'js', 'assets'], function () {
         }));
 });
 
-gulp.task('serve', ['post-modification'], function () {
+gulp.task('serve', ['inject'], function () {
     browserSync.init({
         server: './dist'
     });
