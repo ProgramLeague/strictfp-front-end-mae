@@ -81,7 +81,7 @@ exports.style = function () {
  * @return {glob} glob of them.
  */
 exports.getThirdparty = function (type) {
-    let config = JSON.parse(fs.readFileSync("./config.json","utf-8")); //use fs.read to avoid caching problem
+    let config = JSON.parse(fs.readFileSync("./gulp/config.json","utf-8")); //use fs.read to avoid caching problem
 
     let glob = [];
     let base = config['3rdparty'].base;
