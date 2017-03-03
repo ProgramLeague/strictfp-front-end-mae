@@ -1,3 +1,5 @@
+@import "fonts";
+
 .before-icon {
 	font-family: 'FontAwesome';
 	display: inline-block;
@@ -11,14 +13,14 @@
 	&:not(:last-child) {
 		border-bottom: #CCC 1px dotted;
 	}
-	h2 {
-		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	h2:extend(.font.serif.title) {
+		//font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		font-size: 1.5rem;
 		margin: .3em 0 .2em 0;
 	}
-	.info {
+	.info:extend(.font.serif.text) {
 		font-size: 0.8rem;
-		font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+		//font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 		span {
 			display: inline-block;
 			margin-right: 1.2em;
