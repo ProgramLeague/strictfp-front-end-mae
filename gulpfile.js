@@ -11,20 +11,16 @@ let gulp = require('gulp'),
     injectString = require('gulp-inject-string'),
     rename = require('gulp-rename'),
     reload = browserSync.reload,
+    sequence = require('gulp-sequence'),
     fs = require('fs');
 let { i18n, style, getThirdparty } = require('./gulp/tasks');
 
 /*
 clean
-default(clean)->(inject)
-i18n style3rd js3rd
-style(style3rd) js(i18n,js3rd) assets
-inject(style,js,assets)
+1st:i18n style3rd js3rd
+2nd:style js assets
+3rd:inject
 */
-
-gulp.task('default', ['clean'], function () {
-    gulp.start(['inject']);
-});
 
 gulp.task('clean', function () {
     return gulp.src('./dist', {
@@ -44,7 +40,7 @@ gulp.task('style3rd', function () {
     //no sms needed for 3rdparty plugins.
 });
 
-gulp.task('style', ['style3rd'], function () {
+gulp.task('style', function () {
     return gulp.src([
         './src/less/**/*.less',
         './src/css/**/*.css',
@@ -84,7 +80,7 @@ gulp.task('js3rd', function () {
         }));
 });
 
-gulp.task('js', ['i18n', 'js3rd'], function () {
+gulp.task('js', function () {
     return gulp.src('./src/js/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(uglify())
@@ -97,7 +93,7 @@ gulp.task('js', ['i18n', 'js3rd'], function () {
         }));
 });
 
-gulp.task('inject', ['style', 'js', 'assets'], function () {
+gulp.task('inject', function () {
     let presetOpts = {
         isRelease: !!gulp.env.release,
         cdn: gulp.env.cdn || ".",
@@ -127,13 +123,38 @@ gulp.task('inject', ['style', 'js', 'assets'], function () {
         }));
 });
 
-gulp.task('serve', ['inject'], function () {
+/* Things does not work with v3.9.1.
+    They haven't updated the Gulp yet!
+
+gulp.task('1st', function () {
+    return gulp.parallel('i18n', 'style3rd', 'js3rd');
+});
+
+gulp.task('2nd', function () {
+    return gulp.parallel('style', 'js', 'assets');
+});
+
+gulp.task('3rd', gulp.series('inject'));
+
+gulp.task('default', gulp.series('clean', '1st', '2nd', '3rd'));
+
+*/
+
+//This should work and looks pretty good:
+gulp.task('default', sequence(
+    ['i18n', 'style3rd', 'js3rd'],
+    ['style', 'js', 'assets'],
+    'inject'
+));
+
+gulp.task('serve', ['default'], function () {
     browserSync.init({
         server: './dist'
     });
 
     gulp.watch('./src/js/**/*.js', ['js']);
     gulp.watch('./src/(images|fonts)/**/*', ['assets']);
-    gulp.watch('./src/(less|css)/**/*', ['style']);
+    gulp.watch('./src/css/**/*', ['style']);
+    gulp.watch('./src/less/**/*', ['style']);
     gulp.watch('./src/*.html', ['inject']);
 });
