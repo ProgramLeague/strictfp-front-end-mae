@@ -11,6 +11,7 @@ let gulp = require('gulp'),
     injectString = require('gulp-inject-string'),
     rename = require('gulp-rename'),
     reload = browserSync.reload,
+    cached = require('gulp-cached'),
     sequence = require('gulp-sequence'),
     fs = require('fs');
 let { i18n, style, getThirdparty } = require('./gulp/tasks');
@@ -45,6 +46,7 @@ gulp.task('style', function () {
         './src/less/**/*.less',
         './src/css/**/*.css',
     ])
+        .pipe(cached('style'))
         .pipe(sourcemaps.init())
         .pipe(style())
         .pipe(cleanCss())
@@ -82,6 +84,7 @@ gulp.task('js3rd', function () {
 
 gulp.task('js', function () {
     return gulp.src('./src/js/**/*.js')
+        .pipe(cached('js'))
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(license(fs.readFileSync('misc/license-head.txt','utf-8')))
