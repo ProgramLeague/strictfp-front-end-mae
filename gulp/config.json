@@ -13,6 +13,7 @@
 		[ "./src/images/**/*", "/images/" ],
 		[ "./node_modules/font-awesome/fonts/*", "fonts/" ]
 	],
+	"preset": {},
 	"comments": [
 		"In 3rdparty, paths to plugin is based on 3rdparty.base.",
 		"In assets: every element is like [ source, dest ], ",

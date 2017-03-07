@@ -15,6 +15,8 @@ let gulp = require('gulp'),
     sequence = require('gulp-sequence'),
     fs = require('fs');
 let { i18n, style, getThirdparty } = require('./gulp/tasks');
+let config = require('./gulp/config.json');
+let argv = require('./gulp/resolve_argv.js');
 
 /*
 clean
@@ -57,12 +59,19 @@ gulp.task('style', function () {
         }));
 });
 
-gulp.task('assets', function () {
-    gulp.src('./src/images/**/*')
+gulp.task('assets:img', function () {
+    return gulp.src('./src/images/**/*')
         .pipe(gulp.dest('./dist/images/'));
-    gulp.src('./node_modules/font-awesome/fonts/*')
+});
+gulp.task('assets:fa', function () {
+    return gulp.src('./node_modules/font-awesome/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'));
 });
+gulp.task('assets:fonts', function () {
+    return gulp.src('./src/fonts/**/*')
+        .pipe(gulp.dest('./dist/fonts/'));
+});
+gulp.task('assets', sequence(['assets:img', 'assets:fa', 'assets:fonts']));
 
 gulp.task('i18n', function () {
     return gulp.src('./src/i18n/*.txt')
@@ -97,12 +106,12 @@ gulp.task('js', function () {
 });
 
 gulp.task('inject', function () {
-    let presetOpts = {
-        isRelease: !!gulp.env.release,
-        cdn: gulp.env.cdn || ".",
-        apiRoot: gulp.env['api-root'] || '/api/v0',
-        misc: JSON.parse(gulp.env['preset-misc'] || '{}')
-    };
+    let presetOpts = Object.assign({
+        isRelease: !!argv.release,
+        cdn: argv.cdn || ".",
+        apiRoot: argv['api-root'] || '/api/v0',
+        misc: JSON.parse(argv['preset-misc'] || '{}')
+    }, config);
     return gulp.src('./src/index.html')
         .pipe(
             inject(
@@ -145,6 +154,7 @@ gulp.task('default', gulp.series('clean', '1st', '2nd', '3rd'));
 
 //This should work and looks pretty good:
 gulp.task('default', sequence(
+    'clean',
     ['i18n', 'style3rd', 'js3rd'],
     ['style', 'js', 'assets'],
     'inject'
